@@ -6,23 +6,26 @@ const theheader = document.createElement("header");
 const themain = document.createElement("main");
 const thefooter = document.createElement("footer");
 
-thebody.append(theheader, themain, thefooter);
+thebody.append(theheader, themain, thefooter); // capturando el Body.
 
-function viewHeader(dom, newLigue) {
+let listOfTeams = [];
+
+function viewHeader(dom, newLigueCreated) {
+  dom.innerHTML = "";
   const navbar = document.createElement("nav");
   navbar.classList.add("navPage");
   navbar.innerHTML = `
   <nav class="navbar navbar-expand-lg bg-primary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-    <img src="${newLigue.iconLigue}" id="imageLogo" alt="escudoLiga"></a>
+    <img src="${newLigueCreated.iconLigue}" id="imageLogo" alt="escudoLiga"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <h1 class="nav-link active" aria-current="page" href="#">${newLigue.nameLigue}</h1>
+          <h1 class="nav-link active" aria-current="page" href="#">${newLigueCreated.nameLigue}</h1>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Tus Ligas</a>
@@ -40,6 +43,7 @@ function viewHeader(dom, newLigue) {
 function viewMain(dom) {
   const introPage = document.createElement("div");
   introPage.classList.add("welcomePage");
+  dom.innerHTML = "";
   introPage.innerHTML = `
     <h2 class="bienvenida" > Bienvenido a tus ligas</h2>
     <p>Aqui podras crear tu tipo de torneo, ya sea en modo liga. ingresa tus equipos y compruebalo</p>
@@ -50,7 +54,7 @@ function viewMain(dom) {
   givemeTeam.innerHTML = `
    <form class="row g-3">
         <div class="col-md-6">
-            <label for="validationDefault01" class=" form-label" >Nombre de la Liga</label>
+            <label for="validationDefault01" class="form-label" >Nombre de la Liga</label>
             <input type="text" class="form-control" id="validationDefault01" required>
         </div>
     
@@ -95,7 +99,9 @@ function buildLigue(dom, nameLigue, howManyTeams) {
         <label for="validationCustom${index + 1}" class="form-label">Equipo ${
       index + 1
     }</label>
-        <input type="text" class="form-control" id="validationCustom01" required>
+        <input type="text" class="form-control viwerTeam" id="validationCustom${
+          index + 1
+        }" required>
         <div class="valid-feedback">
             Looks good!
         </div>
@@ -110,9 +116,32 @@ function buildLigue(dom, nameLigue, howManyTeams) {
   `;
 
   newLigueForm.appendChild(cierreFormulario);
+
+  cierreFormulario.addEventListener("click", () => {
+    createLigueTeams("form-control viwerTeam", nameLigue);
+    refreshViewApp();
+    console.log(listOfTeams);
+  });
+
   container.appendChild(titleLigue);
   container.appendChild(newLigueForm);
   dom.appendChild(container);
+}
+
+function createLigueTeams(classneed, nameLigue) {
+  const listAllTeam = document.getElementsByClassName(classneed);
+
+  const newLigueAviable = new NewLigue(nameLigue);
+
+  for (equipo of listAllTeam) {
+    chargeTeamLigue(equipo.value, newLigueAviable.equiposDeleTorneo);
+  }
+  listOfTeams.push(newLigueAviable);
+}
+
+function chargeTeamLigue(team, arrayDestiny) {
+  const newTeam = new Equipo(`${team}`);
+  arrayDestiny.push(newTeam);
 }
 
 function refreshViewApp() {
@@ -120,4 +149,37 @@ function refreshViewApp() {
   viewMain(themain);
 }
 
+function creadorDeFechas(arrayNecesario, nameOfLigue) {
+  const newLigue = NewLigue(nameOfLigue);
+
+  for (let index = 0; index < arrayNecesario.length; index++) {
+    const elementoDescartado = arrayNecesario[index]; // equipo que se quito en la iteracion
+    const arrayVariable = arrayNecesario.filter(
+      (ele) => ele != arrayNecesario[index]
+    );
+
+    console.log(arrayVariable);
+    console.log(elementoDescartado);
+  }
+}
+
+const coincidencias = [];
+
+function result_prode(a) {
+  const b = [...a].reverse();
+
+  for (i of a) {
+    const basta = [];
+    for (e of a) {
+      if (e != i) {
+        basta.push([e, i]);
+      }
+    }
+    coincidencias.push(basta);
+  }
+}
+
+result_prode(["ana", "bianca", "bruno", "messi"]);
+
+console.log(coincidencias);
 refreshViewApp();
