@@ -8,7 +8,7 @@ const thefooter = document.createElement("footer");
 
 thebody.append(theheader, themain, thefooter); // capturando el Body.
 
-let listOfTeams = [];
+let contenedorDelUsuario = [];
 
 function viewHeader(dom, newLigueCreated) {
     dom.innerHTML = "";
@@ -16,7 +16,7 @@ function viewHeader(dom, newLigueCreated) {
     navbar.classList.add("navPage");
     navbar.innerHTML = `
   <nav class="navbar navbar-expand-lg bg-primary">
-  <div class="container-fluid">
+    <div class="container-fluid">
     <a class="navbar-brand" href="#">
     <img src="${newLigueCreated.iconLigue}" id="imageLogo" alt="escudoLiga"></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,24 +32,26 @@ function viewHeader(dom, newLigueCreated) {
         </li>
         <li class="nav-item">
       </ul>
-    </div>
-  </div>
-</nav>
-`;
+        </div>
+        </div>
+        </nav>
+    `;
 
     dom.appendChild(navbar);
 }
 
-function viewMain(dom) {
+function viewMain() {
     const introPage = document.createElement("div");
     introPage.classList.add("welcomePage");
-    dom.innerHTML = "";
+
+    themain.innerHTML = "";
     introPage.innerHTML = `
     <h2 class="bienvenida" > Bienvenido a tus ligas</h2>
     <p>Aqui podras crear tu tipo de torneo, ya sea en modo liga. ingresa tus equipos y compruebalo</p>
     `;
 
     const givemeTeam = document.createElement("div");
+    givemeTeam.setAttribute("id", "queBarbaro");
     givemeTeam.classList.add("giveTeam");
     givemeTeam.innerHTML = `
    <form class="row g-4">
@@ -69,19 +71,21 @@ function viewMain(dom) {
         </div>
     </form>`;
 
-    dom.appendChild(introPage);
-    dom.appendChild(givemeTeam);
+    themain.appendChild(introPage);
+    themain.appendChild(givemeTeam);
 
     const buttonConfirm = document.getElementById("btnCreateLigue");
 
     buttonConfirm.addEventListener("click", () => {
-        const nombreLiga = document.getElementById("validationDefault01").value;
-        const canti = document.getElementById("validationDefault02").value;
-        buildLigue(themain, nombreLiga, canti);
+        buildLigueTeams();
     });
 }
 
-function buildLigue(dom, nameLigue, howManyTeams) {
+function buildLigueTeams() {
+    const nombreLiga = document.getElementById("validationDefault01").value;
+    const canti = document.getElementById("validationDefault02").value;
+
+    const contenedorDivTeam = document.getElementById("queBarbaro");
     const container = document.createElement("div");
 
     const newLigueForm = document.createElement("form");
@@ -89,10 +93,10 @@ function buildLigue(dom, nameLigue, howManyTeams) {
     const titleLigue = document.createElement("div");
     titleLigue.classList.add("titleLigue");
     titleLigue.innerHTML = `
-  <h3>El nombre de tu torneo será : ${nameLigue}</h3>
+  <h3>El nombre de tu torneo será : ***   <spam id = "nombreDeLiga">${nombreLiga}</spam>  ***</h3>
   `;
 
-    for (let index = 0; index < howManyTeams; index++) {
+    for (let index = 0; index < canti; index++) {
         const newInput = document.createElement("div");
         newInput.classList.add("col-md-3");
         newInput.innerHTML = `
@@ -112,31 +116,32 @@ function buildLigue(dom, nameLigue, howManyTeams) {
     const cierreFormulario = document.createElement("div");
     cierreFormulario.classList.add("col-12");
     cierreFormulario.innerHTML = `
-    <button class="btn btn-primary" type="reset">Submit form</button>
+    <button class="btn btn-primary" type="reset">Confirma Equipos</button>
   `;
 
     newLigueForm.appendChild(cierreFormulario);
 
     cierreFormulario.addEventListener("click", () => {
-        createLigueTeams("form-control viwerTeam", nameLigue);
+        createLigueTeams("form-control viwerTeam");
         refreshViewApp();
     });
-
     container.appendChild(titleLigue);
     container.appendChild(newLigueForm);
-    dom.appendChild(container);
+    contenedorDivTeam.appendChild(container);
+
+    contenedorDivTeam;
 }
 
-function createLigueTeams(classneed, nameLigue) {
+function createLigueTeams(classneed) {
+    const nameOfTheLigue = document.getElementById("nombreDeLiga").innerText;
     const listAllTeam = document.getElementsByClassName(classneed);
 
-    const newLigueAviable = new NewLigue(nameLigue);
+    console.log(listAllTeam.length);
 
     for (equipo of listAllTeam) {
-        chargeTeamLigue(equipo.value, newLigueAviable.equiposDeleTorneo);
+        console.log(equipo.value);
     }
-    listOfTeams.push(newLigueAviable);
-    console.log(listAllTeam);
+    //listOfTeams.push(newLigueAviable);
 }
 
 function chargeTeamLigue(team, arrayDestiny) {

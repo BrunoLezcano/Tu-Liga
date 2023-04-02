@@ -26,8 +26,10 @@ function Equipo(
 }
 
 // constructor de RESULTADOS de las FECHAS
-function Finales(fecha, resultados = []) {
-  (this.fecha = fecha), (this.resultados = resultados);
+function Fecha(fecha, resultados = [], partidosDeFecha = []) {
+  (this.fecha = fecha),
+    (this.resultados = resultados),
+    (this.partidosDeFecha = partidosDeFecha);
 }
 
 // constructor de LIGAS y FECHAS
@@ -40,4 +42,10 @@ function NewLigue(nameLigue, equiposDeleTorneo = [], partidosDeFecha = []) {
 // constructor de NOMBRE LIGAS E iCONOS.
 function createLigue(nameLigue, iconLigue) {
   (this.nameLigue = nameLigue), (this.iconLigue = iconLigue);
+}
+
+function crealoNo(arrayObtenido, equipoDescartado, gruposParaFechas) {
+  (this.arrayObtenido = arrayObtenido),
+    (this.equipoDescartado = equipoDescartado),
+    (this.gruposParaFechas = gruposParaFechas);
 }
